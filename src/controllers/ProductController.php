@@ -5,6 +5,7 @@ namespace App\controllers;
 use App\controllers\Controller;
 use App\core\Database;
 use App\utils\File;
+use App\utils\Functions;
 
 class ProductController extends Controller
 {
@@ -82,7 +83,7 @@ class ProductController extends Controller
 
     $imageURL = "";
     if (!empty($productImage)) {
-      $imageURL .= File::imageUpload($productImage);
+      $imageURL = File::imageUpload($productImage);
       if (!$imageURL) {
         $this->response("FileType not Allowed : " . $productImage["type"], false);
         return;
@@ -134,7 +135,7 @@ class ProductController extends Controller
         $product = Database::getInstance()->getResultsByQuery("SELECT * FROM `products` WHERE `id` = $id;");
         $product = $product[0];
         if (count($product) > 0) {
-          $oldImagePath = __DIR__ . "/../public" . $product["image"];
+          $oldImagePath = __DIR__ . "/../../public" . $product["image"];
           if (file_exists($oldImagePath) && $product["image"] != "") {
             unlink($oldImagePath);
           }
@@ -187,6 +188,7 @@ class ProductController extends Controller
     Database::getInstance()->onlyExecuteQuery($sql);
   }
 
+
   public function updateProduct()
   {
     if (isset($_POST["id"]) && $_POST["id"] != "") {
@@ -211,8 +213,8 @@ class ProductController extends Controller
         $product = Database::getInstance()->getResultsByQuery("SELECT * FROM `products` WHERE `id` = $id");
         $product  = $product[0];
         $imageURL = "";
-        if (!empty($productImage)) {
-          unlink(__DIR__ . "/../public" . $product["image"]);
+        if (!empty($productImage) && !empty($product["image"])) {
+          unlink(__DIR__ . "/../../public" . $product["image"]);
           $imageURL .= File::imageUpload($productImage);
           if (!$imageURL) {
             $this->response("FileType not Allowed : " . $productImage["type"], false);

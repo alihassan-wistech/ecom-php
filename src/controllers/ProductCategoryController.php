@@ -31,7 +31,7 @@ class ProductCategoryController extends Controller
             }
         }
 
-        Database::onlyExecuteQuery("INSERT INTO `categories`(`name`, `parent`, `image`) VALUES ('$categoryName',$categoryParent,'$imageURL')");
+        Database::getInstance()->onlyExecuteQuery("INSERT INTO `categories`(`name`, `parent`, `image`) VALUES ('$categoryName',$categoryParent,'$imageURL')");
         $this->response("New Category Created", true);
     }
 
@@ -40,7 +40,7 @@ class ProductCategoryController extends Controller
         if (empty($categoryID)) {
             $categoryID = 0;
         } elseif ($categoryID !== 0) {
-            $availableCategories = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $categoryID;");
+            $availableCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $categoryID;");
             if (count($availableCategories) == 0) {
                 $this->response("Selected Category not Available : " . $categoryID, false);
                 return;
@@ -84,11 +84,11 @@ class ProductCategoryController extends Controller
         if (isset($_GET["id"]) && $_GET["id"] != "") {
             $id = $_GET["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
                 if (count($category) > 0) {
 
-                    $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
-                    $products = Database::getResultsByQuery("SELECT * FROM `products`");
+                    $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
+                    $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
                     $productsByCategory = self::getProductsByCategory($products, $categories, $id);
 
                     $params["categories"] = $categories;
@@ -143,9 +143,9 @@ class ProductCategoryController extends Controller
         if (isset($_POST["id"]) && $_POST["id"] != "") {
             $id = $_POST["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
-                $products = Database::getResultsByQuery("SELECT * FROM `products`");
-                $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
+                $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
+                $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
                 if (count($category) > 0) {
                     $category = $category[0];
                     $categoryHasProducts = self::getProductsByCategory($products, $categories, $category["id"]);
@@ -158,7 +158,7 @@ class ProductCategoryController extends Controller
                     if (file_exists($oldImagePath) && $category["image"] != "") {
                         unlink($oldImagePath);
                     }
-                    Database::onlyExecuteQuery("DELETE FROM `categories` WHERE `id` = $id;");
+                    Database::getInstance()->onlyExecuteQuery("DELETE FROM `categories` WHERE `id` = $id;");
                     $this->response("Category Deleted Successfully", true);
                     return;
                 }
@@ -174,8 +174,8 @@ class ProductCategoryController extends Controller
         if (isset($_GET["id"]) && $_GET["id"] != "") {
             $id = $_GET["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
-                $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
+                $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
                 $params["category"] = $category[0];
                 $params["categories"] = $categories;
                 $pageInfo = ["title" => "Edit Category"];
@@ -207,7 +207,7 @@ class ProductCategoryController extends Controller
 
         $this->validateCategory($categoryParent);
 
-        $category = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $categoryID;");
+        $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $categoryID;");
         $category = $category[0];
 
         $imageURL = "";
@@ -220,14 +220,14 @@ class ProductCategoryController extends Controller
             }
         }
 
-        Database::onlyExecuteQuery("UPDATE `categories` SET `name` = '$categoryName', `parent` = $categoryParent, `image` = '$imageURL' WHERE `id` = $categoryID");
+        Database::getInstance()->onlyExecuteQuery("UPDATE `categories` SET `name` = '$categoryName', `parent` = $categoryParent, `image` = '$imageURL' WHERE `id` = $categoryID");
         $this->response("Category Updated Successfully", true);
     }
 
     public function categories(array $params)
     {
-        $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
-        $products = Database::getResultsByQuery("SELECT * FROM `products`");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
+        $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
         $params["categories"] = $categories;
         $params["products"] = $products;
 
@@ -237,7 +237,7 @@ class ProductCategoryController extends Controller
 
     public function newCategory(array $params)
     {
-        $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
         $params["categories"] = $categories;
         $pageInfo = ["title" => "New Product Category", "description" => "Products Page Admin Panel"];
         $this->renderView($pageInfo, "admin/products/categories/new", "admin", $params);

@@ -2,16 +2,17 @@
 
 namespace App\traits;
 
-trait Singleton {
-    public static function getInstance(){
-        $instances = [];
+trait Singleton
+{
+    private static $instances = [];
+    public static function getInstance()
+    {
         $called_class = get_called_class();
 
-        if (!isset($instances[$called_class])) {
-            $instances[$called_class] = new $called_class;
+        if (!isset(self::$instances[$called_class])) {
+            self::$instances[$called_class] = new $called_class;
         }
 
-        return $instances[$called_class];
-        
+        return self::$instances[$called_class];
     }
 }

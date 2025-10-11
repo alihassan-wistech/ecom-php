@@ -94,9 +94,8 @@ $categories = $data["data"]["categories"];
 <script>
     $(document).ready(function() {
         $('.summernote').summernote();
-        $('.note-editable').html("<?= html_entity_decode($product["description"]) ?>");
+        $('.note-editable').html(`<?= html_entity_decode($product["description"]) ?>`);
     });
-
 
     const productForm = document.querySelector("#product-form")
     const inputs = productForm.querySelectorAll(".form-control")

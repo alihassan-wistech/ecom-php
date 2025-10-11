@@ -42,7 +42,7 @@ class UserController extends Controller
       return;
     }
 
-    $user = Database::getResultsByQuery("SELECT * FROM `users` WHERE `email` = '$email'");
+    $user = Database::getInstance()->getResultsByQuery("SELECT * FROM `users` WHERE `email` = '$email'");
 
     if (count($user) > 0) {
       $this->response(json_encode(["email" => "User Already Exists with Email : " . $email]), false);
@@ -58,7 +58,7 @@ class UserController extends Controller
     $fullAddress = json_encode(["countryId" => $countryId, "stateId" => $stateId, "cityId" => $cityId, "address" => $filteredAddress]);
 
     $sql = "INSERT INTO `users`(`name`, `email`, `password`, `address`, `phone`) VALUES ('$filteredName','$email','$securedPassword','$fullAddress','$filteredPhone')";
-    Database::onlyExecuteQuery($sql);
+    Database::getInstance()->onlyExecuteQuery($sql);
 
     $this->response("New User Created Successfully", true);
     return;
@@ -76,7 +76,7 @@ class UserController extends Controller
       return;
     }
 
-    $user = Database::getResultsByQuery("SELECT * FROM `users` WHERE `email` = '$email'");
+    $user = Database::getInstance()->getResultsByQuery("SELECT * FROM `users` WHERE `email` = '$email'");
 
     if (count($user) <= 0) {
       $this->response("User does not exists with Email : " . $email, false);

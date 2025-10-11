@@ -119,7 +119,7 @@ class Functions
     $productID = $product["id"];
     $productImage = $product["image"] != "" ? $product["image"]  : $placeholderImage;
 
-    $slug = strtolower(str_replace(" ","_", $productName." ".$productID));
+    $slug = strtolower(str_replace(" ", "_", $productName . " " . $productID));
 
     echo <<<HTML
      <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -258,5 +258,20 @@ class Functions
     <meta name="author" content="$pageAuthor">
     <title>$pageTitle - $siteName</title>
     HTML;
+  }
+
+
+
+  public static function PrintFormatData($data)
+  {
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+  }
+  public static function DumpFormatData($data)
+  {
+    echo "<pre>";
+    var_dump($data);
+    echo "</pre>";
   }
 }

@@ -2,9 +2,6 @@
 
 use App\controllers\ProductCategoryController;
 
-$products = $data["data"]["products"];
-$categories = $data["data"]["categories"];
-
 ?>
 
 <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">

@@ -6,18 +6,19 @@ class Functions
 {
   public static function getTemplate(string $name, array $data = [])
   {
+    extract($data);
     ob_start();
-    require_once __DIR__ . "/../../templates/$name.php";
+    require_once template_dir("{$name}.php");
     return ob_get_clean();
   }
 
-  public static function getLayout(string $name, string $template, array $data)
+  public static function getLayout(string $name, string $templateContent, array $data): void
   {
+    extract($data);
     ob_start();
-    require_once __DIR__ . "/../../templates/layouts/$name.php";
+    require_once template_dir("layouts/{$name}.php");
     $layout = ob_get_clean();
-    $page = str_replace("{{content}}", $template, $layout);
-    echo $page;
+    echo str_replace('{{content}}', $templateContent, $layout);
   }
 
   public static function Scripts()

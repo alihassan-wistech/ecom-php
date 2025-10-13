@@ -4,14 +4,13 @@ namespace App\controllers;
 
 use App\utils\Functions;
 
-class Controller
+abstract class Controller
 {
     protected function renderView(array $pageInfo, string $template, string $layout, array $data = [])
     {
-        $params["page-info"] = $pageInfo;
-        $params["data"] = $data;
-        $template = Functions::getTemplate($template, $params);
-        Functions::getLayout($layout, $template, $params);
+        $data["page-info"] = $pageInfo;
+        $template = Functions::getTemplate($template, $data);
+        Functions::getLayout($layout, $template, $data);
     }
 
     protected function response(string $message, bool $status)

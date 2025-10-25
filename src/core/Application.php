@@ -1,6 +1,6 @@
 <?php
 
-namespace App\core;
+namespace App\Core;
 
 use Dotenv\Dotenv;
 
@@ -11,9 +11,8 @@ class Application
         try {
             $dotenv = Dotenv::createImmutable(BASE_DIR);
             $dotenv->load();
-        } catch (\Exception $e) {
-            echo ".env file not found in current directory.";
-            exit();
+        } catch (\Throwable $t) {
+            throw $t;
         }
         session_start();
 

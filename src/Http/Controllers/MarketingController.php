@@ -1,10 +1,10 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\utils\File;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Utils\File;
+use App\Core\Database;
 
 class MarketingController extends Controller
 {

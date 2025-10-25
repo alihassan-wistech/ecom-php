@@ -1,9 +1,9 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Core\Database;
 
 class CustomerController extends Controller
 {

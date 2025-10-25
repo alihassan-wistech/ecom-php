@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
-use App\utils\Functions;
+use App\Core\Database;
+use App\Http\Controllers\Controller;
 
 class CartController extends Controller
 {
@@ -19,7 +18,7 @@ class CartController extends Controller
 
       $oldRecordQuery = "SELECT * FROM `cart` WHERE `checkout` = 'false' OR `checkout` = '' AND `user_id` = $userID";
 
-      $oldRecordData = Database::getResultsByQuery($oldRecordQuery);
+      $oldRecordData = Database::getInstance()->getResultsByQuery($oldRecordQuery);
 
       $sql = "INSERT INTO `cart`(`cart`, `checkout`, `user_id`) VALUES ('$cart','$checkout','$userID')";
 
@@ -27,7 +26,7 @@ class CartController extends Controller
         $sql = "UPDATE `cart` SET `cart` = '$cart', `checkout` = '$checkout' WHERE `user_id` = $userID";
       }
 
-      $result = Database::onlyExecuteQuery($sql);
+      $result = Database::getInstance()->onlyExecuteQuery($sql);
 
       if ($result != false) {
         $this->response("Cart Saved Successfully", true);
@@ -47,7 +46,7 @@ class CartController extends Controller
     if (isset($_GET["id"]) && $_GET["id"] != "") {
       $id = $_GET["id"];
       if (is_int(intval($id))) {
-        $cart = Database::getResultsByQuery("SELECT * FROM `cart` WHERE `id` = $id");
+        $cart = Database::getInstance()->getResultsByQuery("SELECT * FROM `cart` WHERE `id` = $id");
         if (count($cart) > 0) {
           $cart = $cart[0];
           $this->response(json_encode($cart), true);

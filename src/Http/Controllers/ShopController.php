@@ -1,9 +1,9 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\controllers\ProductCategoryController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProductCategoryController;
 use App\core\Database;
 
 class ShopController extends Controller
@@ -40,11 +40,11 @@ class ShopController extends Controller
       $slugParts  = explode("_", $slug);
       $id = $slugParts[count($slugParts) - 1];
       if (is_int(intval($id))) {
-        $product = Database::getResultsByQuery("SELECT * FROM `products` WHERE `id` = $id");
+        $product = Database::getInstance()->getResultsByQuery("SELECT * FROM `products` WHERE `id` = $id");
         if (count($product) > 0) {
-          $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+          $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
           $params["categories"] = $categories;
-          $products = Database::getResultsByQuery("SELECT * FROM `products`");
+          $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
           $params["related-products"] = $products;
           // Get First Element of Array
           $product = array_shift($product);
@@ -64,11 +64,11 @@ class ShopController extends Controller
     if (isset($_GET["id"]) && $_GET["id"] != "") {
       $id = $_GET["id"];
       if (is_int(intval($id))) {
-        $category = Database::getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
+        $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE `id` = $id");
         if (count($category) > 0) {
-          $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+          $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
           $params["categories"] = $categories;
-          $products = Database::getResultsByQuery("SELECT * FROM `products`");
+          $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
           $params["products"] = $products;
 
           $productsByCategory = ProductCategoryController::getProductsByCategory($products, $categories, $id);

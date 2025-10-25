@@ -1,22 +1,22 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Core\Database;
 
 class TestController extends Controller
 {
     public function categoryName(array $params)
     {
-        $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
         $params["categories"] = $categories;
 
-        $postCategories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+        $postCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
         $params["postCategories"] = $postCategories;
 
 
-        $products = Database::getResultsByQuery("SELECT * FROM `products`");
+        $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
         $params["products"] = $products;
 
 

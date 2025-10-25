@@ -83,15 +83,15 @@ function env(string $key, $default = null)
 }
 
 /**
- * Generate a URL to an asset (CSS, JS, image, etc.) using ASSETS_URL from .env
+ * Generate a URL to an asset (CSS, JS, image, etc.) using SITE_URL from .env
  *
  * @param string $path Relative path to the asset (e.g., 'css/app.css')
  * @return string Full URL to the asset
  */
 function asset(string $path = ''): string
 {
-    // Get and clean ASSETS_URL: trim whitespace and trailing slashes
-    $baseUrl = rtrim(trim(env('ASSETS_URL', '/')), "/\\");
+    // Get and clean SITE_URL: trim whitespace and trailing slashes
+    $baseUrl = rtrim(trim(env('SITE_URL', '/')), "/\\");
 
     if (empty($path)) {
         return $baseUrl;
@@ -101,4 +101,30 @@ function asset(string $path = ''): string
     $cleanPath = ltrim(trim($path), "/\\");
 
     return $baseUrl . '/' . $cleanPath;
+}
+
+function using_layout(string $layout)
+{
+    $GLOBALS['__layout'] = $layout;
+}
+
+function yield_section(string $name)
+{
+    echo $GLOBALS['__sections'][$name] ?? '';
+}
+
+function start_section(string $name)
+{
+    $GLOBALS['__current_section'] = $name;
+    ob_start();
+}
+
+function end_section(string|null $name = null)
+{
+    $section = $name ?? $GLOBALS['__current_section'];
+    if (empty($section)) {
+        return;
+    }
+    $content = ob_get_clean();
+    $GLOBALS['__sections'][$section] = $content;
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\core;
+namespace App\Core;
 
-use App\traits\Singleton;
+use App\Traits\Singleton;
 use PDO;
 use PDOException;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\utils\Validator;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Utils\Validator;
+use App\Core\Database;
 
 class UserController extends Controller
 {
@@ -27,9 +27,9 @@ class UserController extends Controller
       "password" => $password,
       "address" => $address,
       "phone" => $phone,
-      "city"=>$cityId,
-      "country"=>$countryId,
-      "state"=>$stateId
+      "city" => $cityId,
+      "country" => $countryId,
+      "state" => $stateId
     ]);
 
     if (count($validate["errors"]) > 0) {

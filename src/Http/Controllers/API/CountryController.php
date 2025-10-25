@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controllers\api;
+namespace App\Http\Controllers\API;
 
 use App\controllers\Controller;
 use App\data\CountryApi;

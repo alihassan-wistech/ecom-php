@@ -1,16 +1,16 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Core\Database;
 
 class PostCategoryController extends Controller
 {
     public function index(array $params)
     {
-        $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`;");
-        $posts = Database::getResultsByQuery("SELECT * FROM `posts`;");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`;");
+        $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts`;");
         $params["categories"] = $categories;
         $params["posts"] = $posts;
         $pageInfo = ["title" => "Post Categories", "description" => "Products Page Admin Panel"];
@@ -19,7 +19,7 @@ class PostCategoryController extends Controller
 
     public function newCategory(array $params)
     {
-        $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`;");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`;");
         $params["categories"] = $categories;
         $pageInfo = ["title" => "New Post Category", "description" => "Products Page Admin Panel"];
         $this->renderView($pageInfo, "admin/posts/categories/new", "admin", $params);
@@ -31,7 +31,7 @@ class PostCategoryController extends Controller
         if (empty($categoryID)) {
             $categoryID = 0;
         } elseif ($categoryID !== 0) {
-            $availableCategories = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $categoryID;");
+            $availableCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $categoryID;");
             if (count($availableCategories) == 0) {
                 $this->response("Selected Category not Available : " . $categoryID, false);
                 return;
@@ -52,7 +52,7 @@ class PostCategoryController extends Controller
 
         $this->validateCategory($categoryParent);
 
-        Database::onlyExecuteQuery("INSERT INTO `post_categories`(`name`, `parent`) VALUES ('$categoryName',$categoryParent)");
+        Database::getInstance()->onlyExecuteQuery("INSERT INTO `post_categories`(`name`, `parent`) VALUES ('$categoryName',$categoryParent)");
         $this->response("New Category Created", true);
     }
 
@@ -81,11 +81,11 @@ class PostCategoryController extends Controller
         if (isset($_GET["id"]) && $_GET["id"] != "") {
             $id = $_GET["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
                 if (count($category) > 0) {
 
-                    $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
-                    $posts = Database::getResultsByQuery("SELECT * FROM `posts`");
+                    $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
+                    $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts`");
                     $postsByCategory = self::getPostsByCategory($posts, $categories, $id);
 
                     $params["categories"] = $categories;
@@ -109,8 +109,8 @@ class PostCategoryController extends Controller
         if (isset($_GET["id"]) && $_GET["id"] != "") {
             $id = $_GET["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
-                $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
+                $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
                 $params["category"] = $category;
                 $params["categories"] = $categories;
                 $pageInfo = ["title" => "Edit Category"];
@@ -141,7 +141,7 @@ class PostCategoryController extends Controller
 
         $this->validateCategory($categoryParent);
 
-        Database::onlyExecuteQuery("UPDATE `post_categories` SET `name` = '$categoryName', `parent` = $categoryParent WHERE `id` = $categoryID");
+        Database::getInstance()->onlyExecuteQuery("UPDATE `post_categories` SET `name` = '$categoryName', `parent` = $categoryParent WHERE `id` = $categoryID");
         $this->response("Category Updated Successfully", true);
     }
 
@@ -151,9 +151,9 @@ class PostCategoryController extends Controller
         if (isset($_POST["id"]) && $_POST["id"] != "") {
             $id = $_POST["id"];
             if (is_int(intval($id))) {
-                $category = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
-                $posts = Database::getResultsByQuery("SELECT * FROM `posts`");
-                $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+                $category = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $id");
+                $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts`");
+                $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
                 if (count($category) > 0) {
                     $category = array_shift($category);
                     $categoryHasProducts = self::getPostsByCategory($posts, $categories, $category["id"]);
@@ -162,7 +162,7 @@ class PostCategoryController extends Controller
                         $this->response("Unable to Delete Category : " . $category["name"] . " has data", false);
                         return;
                     }
-                    Database::onlyExecuteQuery("DELETE FROM `post_categories` WHERE `id` = $id;");
+                    Database::getInstance()->onlyExecuteQuery("DELETE FROM `post_categories` WHERE `id` = $id;");
                     $this->response("Category Deleted Successfully", true);
                     return;
                 }

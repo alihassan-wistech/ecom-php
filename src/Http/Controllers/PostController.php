@@ -1,16 +1,16 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
+use App\Http\Controllers\Controller;
+use App\Core\Database;
 
 class PostController extends Controller
 {
   public function index(array $params)
   {
-    $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`;");
-    $posts = Database::getResultsByQuery("SELECT * FROM `posts`;");
+    $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`;");
+    $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts`;");
     $params["categories"] = $categories;
     $params["posts"] = $posts;
 
@@ -20,7 +20,7 @@ class PostController extends Controller
 
   public function newPost(array $params)
   {
-    $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`;");
+    $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`;");
     $params["categories"] = $categories;
     $pageInfo = ["title" => "New Post", "description" => "Posts Page Admin Panel"];
     $this->renderView($pageInfo, "admin/posts/new", "admin", $params);
@@ -31,9 +31,9 @@ class PostController extends Controller
     if (isset($_GET["id"]) && $_GET["id"] != "") {
       $id = $_GET["id"];
       if (is_int(intval($id))) {
-        $post = Database::getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
+        $post = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
         if (count($post) > 0) {
-          $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+          $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
           $params["categories"] = $categories;
           // Get First Element of Array
           $post = array_shift($post);
@@ -54,8 +54,8 @@ class PostController extends Controller
     if (isset($_GET["id"]) && $_GET["id"] != "") {
       $id = $_GET["id"];
       if (is_int(intval($id))) {
-        $post = Database::getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
-        $categories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+        $post = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
+        $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
         $post = $post[0];
         $params["post"] = $post;
         $params["categories"] = $categories;
@@ -74,14 +74,14 @@ class PostController extends Controller
     if (isset($_POST["id"]) && $_POST["id"] != "") {
       $id = $_POST["id"];
       if (is_int(intval($id))) {
-        $product = Database::getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id;");
+        $product = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id;");
         $product = $product[0];
         if (count($product) > 0) {
           $oldImagePath = __DIR__ . "/../public" . $product["image"];
           if (file_exists($oldImagePath) && $product["image"] != "") {
             unlink($oldImagePath);
           }
-          Database::onlyExecuteQuery("DELETE FROM `posts` WHERE `id` = $id;");
+          Database::getInstance()->onlyExecuteQuery("DELETE FROM `posts` WHERE `id` = $id;");
           $this->response("Post Deleted Successfully", true);
           return;
         }
@@ -166,7 +166,7 @@ class PostController extends Controller
     $pairs = rtrim($pairs, ",");
 
     $sql = sprintf("UPDATE `%s` SET %s WHERE `id` = $id;", $table, $pairs);
-    Database::onlyExecuteQuery($sql);
+    Database::getInstance()->onlyExecuteQuery($sql);
   }
 
   public function updatePost()
@@ -188,7 +188,7 @@ class PostController extends Controller
           return;
         }
 
-        $post = Database::getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
+        $post = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts` WHERE `id` = $id");
         $post = $post[0];
 
         $imageURL = "";
@@ -225,7 +225,7 @@ class PostController extends Controller
     if (empty($categoryID)) {
       $categoryID = 0;
     } elseif ($categoryID !== 0) {
-      $availableCategories = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $categoryID;");
+      $availableCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE `id` = $categoryID;");
       if (count($availableCategories) == 0) {
         $this->response("Selected Category not Available : " . $categoryID, false);
         return;
@@ -252,6 +252,6 @@ class PostController extends Controller
     $values = rtrim($values, ",");
 
     $sql = sprintf("INSERT INTO `%s`(%s) VALUES (%s);", $table, $tableColumnNames, $values);
-    Database::onlyExecuteQuery($sql);
+    Database::getInstance()->onlyExecuteQuery($sql);
   }
 }

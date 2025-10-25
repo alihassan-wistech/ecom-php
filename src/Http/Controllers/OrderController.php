@@ -1,11 +1,11 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
-use App\enums\OrderStatus;
-use App\utils\Validator;
+use App\Http\Controllers\Controller;
+use App\Core\Database;
+use App\Enums\OrderStatus;
+use App\Utils\Validator;
 
 class OrderController extends Controller
 {
@@ -80,11 +80,11 @@ class OrderController extends Controller
     $userId = isset($_SESSION["user"]) ? $_SESSION["user"]["id"] : null;
     $status = OrderStatus::PENDING;
     $sql = "INSERT INTO `orders`(`user_id`, `amount`, `status`, `items`, `payment_type`, `address`) VALUES ('$userId','$amount','$status','$items','$payment','$fullAddress')";
-    Database::onlyExecuteQuery($sql);
+    Database::getInstance()->onlyExecuteQuery($sql);
 
     if ($userId != null) {
       $sql = "UPDATE `cart` SET `checkout`='true' WHERE `user_id` == $userId";
-      Database::onlyExecuteQuery($sql);
+      Database::getInstance()->onlyExecuteQuery($sql);
     }
     $this->response("Order Created Successfully", true);
     return;

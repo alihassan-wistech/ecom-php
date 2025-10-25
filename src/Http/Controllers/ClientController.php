@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controllers;
+namespace App\Http\Controllers;
 
-use App\controllers\Controller;
-use App\core\Database;
-
+use App\Core\Database;
+use App\Http\Controllers\Controller;
 
 class ClientController extends Controller
 {
@@ -40,31 +39,31 @@ class ClientController extends Controller
     $query = strtolower($query);
 
     if ($query == "products") {
-      $products = Database::getResultsByQuery("SELECT * FROM `products`");
+      $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products`");
       $results = ["products" => $products];
       return $results;
     }
 
     if ($query == "categories") {
-      $categories = Database::getResultsByQuery("SELECT * FROM `categories`");
-      $postCategories = Database::getResultsByQuery("SELECT * FROM `post_categories`");
+      $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
+      $postCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories`");
 
       $results = ["categories" => $categories, "postCategories" => $postCategories];
       return $results;
     }
 
     if ($query == "posts") {
-      $posts = Database::getResultsByQuery("SELECT * FROM `posts`");
+      $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts`");
 
       $results = ["posts" => $posts];
 
       return $results;
     }
 
-    $products = Database::getResultsByQuery("SELECT * FROM `products` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
-    $categories = Database::getResultsByQuery("SELECT * FROM `categories` WHERE  (CONVERT(`name` USING utf8) LIKE '%$query%')");
-    $postCategories = Database::getResultsByQuery("SELECT * FROM `post_categories` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
-    $posts = Database::getResultsByQuery("SELECT * FROM `posts` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
+    $products = Database::getInstance()->getResultsByQuery("SELECT * FROM `products` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
+    $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories` WHERE  (CONVERT(`name` USING utf8) LIKE '%$query%')");
+    $postCategories = Database::getInstance()->getResultsByQuery("SELECT * FROM `post_categories` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
+    $posts = Database::getInstance()->getResultsByQuery("SELECT * FROM `posts` WHERE (CONVERT(`name` USING utf8) LIKE '%$query%')");
 
     $results = ["products" => $products, "categories" => $categories, "postCategories" => $postCategories, "posts" => $posts];
     return $results;

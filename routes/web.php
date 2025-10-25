@@ -1,16 +1,16 @@
 <?php
 
-use App\core\Router;
-use App\controllers\api\CountryController;
-use App\controllers\CartController;
-use App\controllers\HomeController;
-use App\controllers\OrderController;
-use App\controllers\ShopController;
-use App\controllers\TestController;
-use App\controllers\ContactController;
-use App\controllers\ClientController;
-use App\controllers\UserController;
-use App\utils\Functions;
+use App\Core\Router;
+use App\Utils\Functions;
+use App\Http\Controllers\API\CountryController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\UserController;
 
 $router = Router::getInstance();
 
@@ -19,7 +19,6 @@ $router->get("/", [HomeController::class, "index"]);
 $router->get("/shop", [ShopController::class, "index"]);
 $router->get("/shop/{slug}", [ShopController::class, "singleProduct"]);
 $router->get("/shop/category", [ShopController::class, "singleCategory"]);
-
 
 $router->get("/contact", [ContactController::class, "index"]);
 $router->get("/cart", [ShopController::class, "cart"]);
@@ -43,6 +42,7 @@ if (isset($_SESSION["client"]) && $_SESSION["client"] == true) {
     $router->post("/user/login", [UserController::class, "login"]);
     $router->post("/user/register", [UserController::class, "register"]);
 }
+
 // 404 Page
 $router->addNotFoundCallback(function () {
     echo Functions::getTemplate("404");

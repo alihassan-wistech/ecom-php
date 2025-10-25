@@ -1,6 +1,6 @@
 <?php
 
-namespace App\utils;
+namespace App\Utils;
 
 class Functions
 {
@@ -11,6 +11,7 @@ class Functions
     require_once template_dir("{$name}.php");
     return ob_get_clean();
   }
+
 
   public static function getLayout(string $name, string $templateContent, array $data): void
   {

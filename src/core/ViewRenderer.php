@@ -16,9 +16,9 @@ class ViewRenderer
     // Path to template directory (adjust as needed)
     protected string $templateDir;
 
-    public function __construct(string $templateDir)
+    public function __construct()
     {
-        $this->templateDir = rtrim($templateDir, '/') . '/';
+        $this->templateDir = rtrim(template_dir(), '/') . '/';
     }
 
     // Set the layout to wrap the view
@@ -56,33 +56,26 @@ class ViewRenderer
     // Render a view file (with optional data)
     public function render(string $template, array $data = []): string
     {
-        // Clear previous state
+        // Reset state
         $this->sections = [];
         $this->currentSection = null;
 
-        // Extract data into local scope
         extract($data);
 
-        // Render the child view (which may define sections)
-        ob_start();
+        // Render the child view — this populates $this->sections
         include $this->resolvePath($template);
-        ob_end_clean(); // Discard direct output; we only want sections
 
-        // If no layout, just return captured main output (optional fallback)
+        // If no layout, optionally return a default body (not needed if always using layout)
         if (empty($this->layout)) {
-            // Alternative: you could capture main body as a special section
-            return ob_get_clean() ?: ''; // but we already cleaned it
-            // Better: require that views only define sections when using layout
+            return ''; // or throw, or handle differently
         }
 
-        // Render the layout, which will call yieldSection()
+        // Now render the layout, which pulls in sections
         ob_start();
         include $this->resolvePath($this->layout);
         $output = ob_get_clean();
 
-        // Reset layout after render (optional, for reuse)
-        $this->layout = '';
-
+        $this->layout = ''; // reset for next use
         return $output;
     }
 

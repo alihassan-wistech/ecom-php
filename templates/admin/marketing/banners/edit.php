@@ -1,10 +1,3 @@
-<?php
-
-$banner = $data["data"]["banner"];
-
-?>
-
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">Edit Banner</h1>
 </div>
@@ -65,7 +58,7 @@ $banner = $data["data"]["banner"];
 
         formData.append("id", <?= $banner["id"] ?>)
 
-        const response = await fetch("/admin/banners/update", {
+        const response = await fetch("<?php echo url("admin/banners/update") ?>", {
             method: "POST",
             body: formData
         })
@@ -77,7 +70,7 @@ $banner = $data["data"]["banner"];
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin/banners"
+            window.location.href = "<?php echo url("admin/banners") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

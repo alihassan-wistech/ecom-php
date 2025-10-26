@@ -1,16 +1,14 @@
 <?php
 
-use App\controllers\ProductCategoryController;
+use App\Http\Controllers\ProductCategoryController;
 
-$product = $data["data"]["product"];
 $placeholderImage = "/img/product-placeholder.png";
-$categories = $data["data"]["categories"];
 
 ?>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">Product Details</h1>
-    <a href="/admin/products/edit?id=<?= $product["id"] ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
+    <a href="<?php echo url("admin/products/edit?id=" . $product["id"]) ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
         <i class="fas fa-download fa-sm text-white-50"></i> Edit Product</a>
     <a id="delete-btn" href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">
         <i class="fas fa-download fa-sm text-white-50"></i> Delete Product</a>
@@ -30,7 +28,9 @@ $categories = $data["data"]["categories"];
                 </div>
                 <div class="mb-3">
                     <p class="mb-1"><strong>Product Category:</strong></p>
-                    <a href="/admin/products/categories/details?id=<?= $product["category_id"]; ?>"><?php echo ProductCategoryController::getCategoryName($categories, $product["category_id"]) ?></a>
+                    <a href="<?php echo url("admin/products/categories/details?id=" . $product["category_id"]) ?>">
+                        <?php echo ProductCategoryController::getCategoryName($categories, $product["category_id"]) ?>
+                    </a>
                 </div>
                 <div>
                     <p class="mb-1"><strong>Product Short Description:</strong></p>
@@ -75,7 +75,7 @@ $categories = $data["data"]["categories"];
         if (window.confirm("Delete this Product")) {
             const data = new FormData()
             data.append("id", <?= $product["id"] ?>)
-            const response = await fetch("/admin/products/delete", {
+            const response = await fetch("<?php echo url("admin/products/delete") ?>", {
                 method: "POST",
                 body: data
             })
@@ -85,7 +85,7 @@ $categories = $data["data"]["categories"];
             if (result.status == true) {
                 alert.classList.add("alert-success")
                 alert.classList.remove("alert-danger")
-                window.location.href = "/admin/products"
+                window.location.href = "<?php echo url("admin/products") ?>"
             } else {
                 alert.classList.add("alert-danger")
                 alert.classList.remove("alert-success")

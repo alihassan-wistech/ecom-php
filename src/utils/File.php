@@ -13,11 +13,11 @@ class File
 
     if (is_int($doesFileExtensionMatches)) {
       $imageName = time();
-      $imageName .= pathinfo($image["name"])["basename"];
-      if (!file_exists(__DIR__ . "/../../public/uploads")) {
-        mkdir(__DIR__ . "/../../public/uploads");
+      $imageName .= str_replace(" ", "-", pathinfo($image["name"])["basename"]);
+      if (!file_exists(public_dir("uploads"))) {
+        mkdir(public_dir("uploads"));
       }
-      move_uploaded_file($image["tmp_name"], __DIR__ . "/../../public/uploads/$imageName");
+      move_uploaded_file($image["tmp_name"], public_dir("uploads/$imageName"));
       return "/uploads/$imageName";
     } else {
       return false;

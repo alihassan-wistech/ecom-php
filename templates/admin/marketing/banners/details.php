@@ -1,12 +1,6 @@
-<?php
-
-$banner  = $data["data"]["banner"];
-
-?>
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800 flex-fill">Banner Details</h1>
-  <a href="/admin/banners/edit?id=<?= $banner["id"] ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
+  <a href="<?php echo url("admin/banners/edit?id=" . $banner["id"]) ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
     <i class="fas fa-download fa-sm text-white-50"></i> Edit Banner</a>
   <a id="delete-btn" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">
     <i class="fas fa-download fa-sm text-white-50"></i> Delete Banner</a>
@@ -47,35 +41,35 @@ $banner  = $data["data"]["banner"];
 </style>
 
 <script>
-    const deleteBtn = document.querySelector("#delete-btn")
-    const alert = document.querySelector("#alert")
+  const deleteBtn = document.querySelector("#delete-btn")
+  const alert = document.querySelector("#alert")
 
-    deleteBtn.addEventListener("click", async (e) => {
-        e.preventDefault()
+  deleteBtn.addEventListener("click", async (e) => {
+    e.preventDefault()
 
-        deleteBtn.classList.add("disabled")
-        alert.classList.add("d-none")
-        if (window.confirm("Delete this Banner")) {
-            const data = new FormData()
-            data.append("id", <?= $banner["id"] ?>)
-            const response = await fetch("/admin/banners/delete", {
-                method: "POST",
-                body: data
-            })
-            const result = await response.json()
-            alert.classList.remove("d-none")
-            alert.innerText = result.message
-            if (result.status == true) {
-                alert.classList.add("alert-success")
-                alert.classList.remove("alert-danger")
-                window.location.href = "/admin/banners"
-            } else {
-                alert.classList.add("alert-danger")
-                alert.classList.remove("alert-success")
-                deleteBtn.classList.remove("disabled")
-            }
-        } else {
-            deleteBtn.classList.remove("disabled")
-        }
-    })
+    deleteBtn.classList.add("disabled")
+    alert.classList.add("d-none")
+    if (window.confirm("Delete this Banner")) {
+      const data = new FormData()
+      data.append("id", <?= $banner["id"] ?>)
+      const response = await fetch("<?php echo url("admin/banners/delete") ?>", {
+        method: "POST",
+        body: data
+      })
+      const result = await response.json()
+      alert.classList.remove("d-none")
+      alert.innerText = result.message
+      if (result.status == true) {
+        alert.classList.add("alert-success")
+        alert.classList.remove("alert-danger")
+        window.location.href = "<?php echo url("admin/banners") ?>"
+      } else {
+        alert.classList.add("alert-danger")
+        alert.classList.remove("alert-success")
+        deleteBtn.classList.remove("disabled")
+      }
+    } else {
+      deleteBtn.classList.remove("disabled")
+    }
+  })
 </script>

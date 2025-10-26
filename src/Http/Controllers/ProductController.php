@@ -89,6 +89,8 @@ class ProductController extends Controller
       }
     }
 
+    $slug = generateUniqueSlug($productName, "products");
+
     $queryParams = [
       "name" => $productName,
       "image" => $imageURL,
@@ -96,7 +98,8 @@ class ProductController extends Controller
       "description" => $productDescription,
       "category_id" => $productCategory,
       "quantity" => $productQuantity,
-      "price" => $productPrice
+      "price" => $productPrice,
+      "slug" => $slug
     ];
 
     $this->insertData($queryParams, "products");
@@ -155,7 +158,7 @@ class ProductController extends Controller
       if (is_int(intval($id))) {
         $product = Database::getInstance()->getResultsByQuery("SELECT * FROM `products` WHERE `id` = $id");
         $categories = Database::getInstance()->getResultsByQuery("SELECT * FROM `categories`");
-        $params["product"] = $product;
+        $params["product"] = $product[0];
         $params["categories"] = $categories;
         $pageInfo = ["title" => "Edit Category"];
         $this->renderView($pageInfo, "admin/products/edit", "admin", $params);
@@ -213,13 +216,15 @@ class ProductController extends Controller
         $product  = $product[0];
         $imageURL = "";
         if (!empty($productImage) && !empty($product["image"])) {
-          unlink(__DIR__ . "/../../public" . $product["image"]);
+          unlink(public_dir($product["image"]));
           $imageURL .= File::imageUpload($productImage);
           if (!$imageURL) {
             $this->response("FileType not Allowed : " . $productImage["type"], false);
             return;
           }
         }
+
+        $slug = generateUniqueSlug($productName, "products", $id);
 
         $queryParams = [
           "name" => $productName,
@@ -228,7 +233,8 @@ class ProductController extends Controller
           "description" => $productDescription,
           "category_id" => $productCategory,
           "quantity" => $productQuantity,
-          "price" => $productPrice
+          "price" => $productPrice,
+          "slug" => $slug
         ];
 
         $this->updateData($queryParams, "products", $id);

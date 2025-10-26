@@ -1,20 +1,15 @@
 <?php
 
-use App\models\Category;
-use App\controllers\ProductCategoryController;
-
-$categories = $data["data"]["categories"];
-$products = $data["data"]["products"];
+use App\Models\Category;
+use App\Http\Controllers\ProductCategoryController;
 
 ?>
 
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">Categories</h1>
-    <a href="/admin/products" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">
+    <a href="<?php echo url("admin/products") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">
         <i class="fas fa-filter fa-sm text-white-50"></i> Products</a>
-    <a href="/admin/products/categories/new" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+    <a href="<?php echo url("admin/products/categories/new") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Add new Category</a>
 </div>
 
@@ -49,7 +44,7 @@ $products = $data["data"]["products"];
                             <td style="max-width: max-content;">
                                 <img style="object-fit: cover; width:50px;" height="50" src="<?php echo ($category["image"] != "") ? $category["image"] : $placeholderImage;  ?>" />
                             </td>
-                            <td style="text-transform:capitalize"><a href="/admin/products/categories/details?id=<?= $category["id"] ?>">
+                            <td style="text-transform:capitalize"><a href="<?php echo url("admin/products/categories/details?id=" . $category["id"]) ?>">
                                     <?= $category["name"] ?></a>
                             </td>
                             <td><?= implode(Category::$categorySeprator, $parentCategoryName) ?></td>
@@ -74,9 +69,7 @@ $products = $data["data"]["products"];
     </div>
 </div>
 
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script>
+<script defer>
     $(document).ready(function() {
         $('#category-table').DataTable();
     });

@@ -1,11 +1,8 @@
 <?php
 
-use App\models\Category;
-
-$categories = $data["data"]["categories"];
+use App\Models\Category;
 
 ?>
-
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">New Product</h1>
@@ -100,7 +97,7 @@ $categories = $data["data"]["categories"];
         })
         formData.append("description", summerNote.innerHTML.toString())
 
-        const response = await fetch("/admin/products/create", {
+        const response = await fetch("<?php echo url("admin/products/create") ?>", {
             method: "POST",
             body: formData
         })
@@ -112,7 +109,7 @@ $categories = $data["data"]["categories"];
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin/products"
+            window.location.href = "<?php echo url("admin/products") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

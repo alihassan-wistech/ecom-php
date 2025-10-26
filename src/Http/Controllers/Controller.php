@@ -11,7 +11,7 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->viewRenderer = new ViewRenderer(template_dir());
+        $this->viewRenderer = ViewRenderer::getInstance();
     }
 
     protected function renderView(array $pageInfo, string $template, string $layout, array $data = [])

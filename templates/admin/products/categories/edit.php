@@ -2,9 +2,6 @@
 
 use App\models\Category;
 
-$category = $data["data"]["category"];
-$prodCategories = $data["data"]["categories"];
-
 $categories = Category::getCategoriesExceptChildren($prodCategories, $category["id"]);
 
 ?>
@@ -90,7 +87,7 @@ $categories = Category::getCategoriesExceptChildren($prodCategories, $category["
         data.append("image", input.image)
         data.append("id", <?= $category["id"] ?>)
 
-        const response = await fetch("/admin/products/categories/update", {
+        const response = await fetch("<?php echo url("admin/products/categories/update") ?>", {
             method: "POST",
             body: data
         })
@@ -100,7 +97,7 @@ $categories = Category::getCategoriesExceptChildren($prodCategories, $category["
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin/products/categories"
+            window.location.href = "<?php echo url("admin/products/categories") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

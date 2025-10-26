@@ -12,24 +12,25 @@
   ?>
 
   <!-- Custom fonts for this template-->
-  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo asset("vendor/fontawesome-free/css/all.min.css") ?>" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="<?php echo asset("css/sb-admin-2.min.css") ?>" rel="stylesheet">
 
   <!-- Bootstrap core JavaScript-->
-  <script src="/vendor/jquery/jquery.min.js"></script>
-  <script defer src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="<?php echo asset("vendor/jquery/jquery.min.js") ?>"></script>
+  <script defer src="<?php echo asset("vendor/bootstrap/js/bootstrap.bundle.min.js") ?>"></script>
 
   <!-- Core plugin JavaScript-->
-  <script defer src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script defer src="<?php echo asset("vendor/jquery-easing/jquery.easing.min.js") ?>"></script>
 
   <!-- Custom scripts for all pages-->
-  <script defer src="/js/sb-admin-2.min.js"></script>
+  <script defer src="<?php echo asset("js/sb-admin-2.min.js") ?>"></script>
 
-  <link href="/client/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <link rel="shortcut icon" href="/assets/images/fav-icon.png" type="image/x-icon">
+  <link href="<?php echo asset("client/lib/owlcarousel/assets/owl.carousel.min.css") ?>" rel="stylesheet">
+  <link rel="shortcut icon" href="<?php echo asset("assets/images/fav-icon.png") ?>" type="image/x-icon">
+  <link href="<?php echo asset("vendor/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet">
 </head>
 
 <body class="overflow-hidden" id="page-top">
@@ -98,7 +99,10 @@
     </div>
   </div>
 
-  <script src="<?= asset('js/admin.js') ?>"></script>
+  <script src="<?php echo asset("vendor/datatables/jquery.dataTables.min.js") ?>"></script>
+  <script src="<?php echo asset("vendor/datatables/dataTables.bootstrap4.min.js") ?>"></script>
+  <script src="<?php echo asset("js/demo/datatables-demo.js") ?>"></script>
+  <script src="<?php echo asset('js/admin.js') ?>"></script>
 </body>
 
 </html>

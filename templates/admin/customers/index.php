@@ -1,14 +1,6 @@
-<?php
-
-$users = $data["data"]["users"];
-
-?>
-
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800 flex-fill">Customers</h1>
-  <a href="/admin/customers" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+  <a href="<?php echo url("admin/customers") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
     <i class="fas fa-plus fa-sm text-white-50"></i> Generate Report</a>
 </div>
 
@@ -49,8 +41,3 @@ $users = $data["data"]["users"];
     </div>
   </div>
 </div>
-
-
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="/js/demo/datatables-demo.js"></script>

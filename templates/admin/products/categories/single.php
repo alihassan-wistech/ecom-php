@@ -1,18 +1,14 @@
 <?php
 
-use App\models\Category;
+use App\Models\Category;
 
-$category = $data["data"]["category"];
 $placeholderImage = "/img/product-placeholder.png";
-$categories = $data["data"]["categories"];
-$productsByCategory = $data["data"]["productsByCategory"];
 
 ?>
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <div id="alert" class="alert d-none"></div>
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">Category Details</h1>
-    <a href="/admin/products/categories/edit?id=<?= $category["id"] ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
+    <a href="<?php echo url("admin/products/categories/edit?id=" . $category["id"]) ?>" class="d-none d-sm-inline-block btn mx-2 btn-sm btn-primary shadow-sm">
         <i class="fas fa-download fa-sm text-white-50"></i> Edit Category</a>
     <a id="delete-btn" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">
         <i class="fas fa-download fa-sm text-white-50"></i> Delete Category</a>
@@ -39,8 +35,8 @@ $productsByCategory = $data["data"]["productsByCategory"];
                         foreach ($childCategories as $childCategory) {
                             $categoryID = $childCategory["id"];
                             $categoryName = $childCategory["name"];
-
-                            echo "<a href='/admin/products/categories/details?id=$categoryID'>$categoryName</a>, ";
+                            $categoryUrl  = url("admin/products/categories/details?id=$categoryID");
+                            echo "<a href='$categoryUrl'>$categoryName</a>, ";
                         }
                     } else {
                         echo "None";
@@ -80,7 +76,7 @@ $productsByCategory = $data["data"]["productsByCategory"];
                                     <td style="max-width: max-content;">
                                         <img style="object-fit: cover;" width="100" height="100" src="/img/product-placeholder.png" />
                                     </td>
-                                    <td><a href="/admin/products/details?id=<?= $product["id"] ?>"><?= $product["name"] ?></a></td>
+                                    <td><a href="<?php echo url('admin/products/details?id=' . $product["id"]) ?>"><?= $product["name"] ?></a></td>
                                     <td><?= $categoryName ?></td>
                                     <td><?= $product["price"] ?></td>
                                     <td><?= $product["quantity"] ?></td>
@@ -104,11 +100,6 @@ $productsByCategory = $data["data"]["productsByCategory"];
     </div>
 </div>
 
-<script defer src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script defer src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script defer src="/js/demo/datatables-demo.js"></script>
-
-
 <script>
     const deleteBtn = document.querySelector("#delete-btn")
     const alert = document.querySelector("#alert")
@@ -121,7 +112,7 @@ $productsByCategory = $data["data"]["productsByCategory"];
         if (window.confirm("Delete this Category")) {
             const data = new FormData()
             data.append("id", <?= $category["id"] ?>)
-            const response = await fetch("/admin/products/categories/delete", {
+            const response = await fetch("<?php echo url("admin/products/categories/delete") ?>", {
                 method: "POST",
                 body: data
             })
@@ -131,7 +122,7 @@ $productsByCategory = $data["data"]["productsByCategory"];
             if (result.status == true) {
                 alert.classList.add("alert-success")
                 alert.classList.remove("alert-danger")
-                window.location.href = "/admin/products/categories"
+                window.location.href = "<?php echo url("admin/products/categories") ?>"
             } else {
                 alert.classList.add("alert-danger")
                 alert.classList.remove("alert-success")

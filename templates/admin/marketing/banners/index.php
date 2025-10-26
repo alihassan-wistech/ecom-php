@@ -1,14 +1,6 @@
-<?php
-
-$banners = $data["data"]["banners"];
-
-?>
-
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800 flex-fill">Banners</h1>
-  <a href="/admin/banners/new" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+  <a href="<?php echo url("admin/banners/new") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
     <i class="fas fa-plus fa-sm text-white-50"></i> Add new Banner</a>
 </div>
 
@@ -38,7 +30,7 @@ $banners = $data["data"]["banners"];
           ?>
             <tr>
               <td><?= $i ?></td>
-              <td> <a href="/admin/banners/details?id=<?= $banner["id"] ?>"><?= $banner["heading"] ?></a> </td>
+              <td> <a href="<?php echo url("admin/banners/details?id=" . $banner["id"]) ?>"><?= $banner["heading"] ?></a> </td>
               <td><?= $banner["sub_heading"] ?></td>
               <td><?= $banner["btn_text"] ?></td>
               <td><?= $banner["btn_link"] ?></td>
@@ -62,8 +54,3 @@ $banners = $data["data"]["banners"];
     </div>
   </div>
 </div>
-
-
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="/js/demo/datatables-demo.js"></script>

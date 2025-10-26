@@ -1,16 +1,16 @@
 <?php
 
-use App\controllers\AdminController;
-use App\controllers\CustomerController;
-use App\controllers\ProductController;
-use App\controllers\ProductCategoryController;
-use App\controllers\PostController;
-use App\controllers\PostCategoryController;
-use App\controllers\SiteController;
-use App\controllers\MarketingController;
-use App\controllers\OrderController;
-use App\controllers\TestController;
-use App\core\Router;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostCategoryController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\MarketingController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TestController;
+use App\Core\Router;
 
 $router = Router::getInstance();
 
@@ -29,22 +29,26 @@ if (isset($_SESSION["admin"]) && $_SESSION["admin"] == true) {
     $router->post("/admin/products/categories/update", [ProductCategoryController::class, "updateCategory"]);
     $router->post("/admin/products/categories/create", [ProductCategoryController::class, "createCategory"]);
     $router->post("/admin/products/categories/delete", [ProductCategoryController::class, "deleteCategory"]);
-    $router->get("/admin/posts", [PostController::class, "index"]);
-    $router->get("/admin/posts/new", [PostController::class, "newPost"]);
-    $router->post("/admin/posts/create", [PostController::class, "createPost"]);
-    $router->get("/admin/posts/details", [PostController::class, "singlePost"]);
-    $router->post("/admin/posts/delete", [PostController::class, "deletePost"]);
-    $router->get("/admin/posts/edit", [PostController::class, "editPost"]);
-    $router->post("/admin/posts/update", [PostController::class, "updatePost"]);
-    $router->get("/admin/posts/categories", [PostCategoryController::class, "index"]);
-    $router->get("/admin/posts/categories/new", [PostCategoryController::class, "newCategory"]);
-    $router->post("/admin/posts/categories/create", [PostCategoryController::class, "createCategory"]);
-    $router->get("/admin/posts/categories/details", [PostCategoryController::class, "singleCategory"]);
-    $router->post("/admin/posts/categories/delete", [PostCategoryController::class, "deleteCategory"]);
-    $router->get("/admin/posts/categories/edit", [PostCategoryController::class, "editCategory"]);
-    $router->post("/admin/posts/categories/update", [PostCategoryController::class, "updateCategory"]);
-    $router->get("/admin/site_settings", [SiteController::class, "index"]);
-    $router->get("/admin/orders", [OrderController::class, "index"]);
+
+    // * DISABLED POSTS TEMPORARILY
+    // $router->get("/admin/posts", [PostController::class, "index"]);
+    // $router->get("/admin/posts/new", [PostController::class, "newPost"]);
+    // $router->post("/admin/posts/create", [PostController::class, "createPost"]);
+    // $router->get("/admin/posts/details", [PostController::class, "singlePost"]);
+    // $router->post("/admin/posts/delete", [PostController::class, "deletePost"]);
+    // $router->get("/admin/posts/edit", [PostController::class, "editPost"]);
+    // $router->post("/admin/posts/update", [PostController::class, "updatePost"]);
+    // $router->get("/admin/posts/categories", [PostCategoryController::class, "index"]);
+    // $router->get("/admin/posts/categories/new", [PostCategoryController::class, "newCategory"]);
+    // $router->post("/admin/posts/categories/create", [PostCategoryController::class, "createCategory"]);
+    // $router->get("/admin/posts/categories/details", [PostCategoryController::class, "singleCategory"]);
+    // $router->post("/admin/posts/categories/delete", [PostCategoryController::class, "deleteCategory"]);
+    // $router->get("/admin/posts/categories/edit", [PostCategoryController::class, "editCategory"]);
+    // $router->post("/admin/posts/categories/update", [PostCategoryController::class, "updateCategory"]);
+
+    // $router->get("/admin/site_settings", [SiteController::class, "index"]);
+    // $router->get("/admin/orders", [OrderController::class, "index"]);
+
     $router->get("/admin/customers", [CustomerController::class, "index"]);
     $router->get("/admin/banners", [MarketingController::class, "banners"]);
     $router->get("/admin/banners/new", [MarketingController::class, "newBanner"]);

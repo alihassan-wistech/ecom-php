@@ -1,8 +1,6 @@
 <?php
 
-use App\controllers\Category;
-
-$categories = $data["data"]["categories"];
+use App\Models\Category;
 
 ?>
 
@@ -62,7 +60,7 @@ $categories = $data["data"]["categories"];
         data.append("parent", input.parent)
         data.append("image", input.image)
 
-        const response = await fetch("/admin/products/categories/create", {
+        const response = await fetch("<?php echo url("admin/products/categories/create") ?>", {
             method: "POST",
             body: data
         })
@@ -72,7 +70,7 @@ $categories = $data["data"]["categories"];
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin/products/categories"
+            window.location.href = "<?php echo url("admin/products/categories") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

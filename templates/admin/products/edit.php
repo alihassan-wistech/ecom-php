@@ -1,9 +1,6 @@
 <?php
 
-use App\models\Category;
-
-$product = $data["data"]["product"][0];
-$categories = $data["data"]["categories"];
+use App\Models\Category;
 
 ?>
 
@@ -119,7 +116,7 @@ $categories = $data["data"]["categories"];
         formData.append("id", <?= $product["id"] ?>)
         formData.append("description", summerNote.innerHTML.toString())
 
-        const response = await fetch("/admin/products/update", {
+        const response = await fetch("<?php echo url("admin/products/update") ?>", {
             method: "POST",
             body: formData
         })
@@ -131,7 +128,7 @@ $categories = $data["data"]["categories"];
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin/products"
+            window.location.href = "<?php echo url("admin/products") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

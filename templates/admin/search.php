@@ -1,13 +1,3 @@
-<?php
-
-$results = $data["data"]["results"];
-$query = $data["data"]["query"];
-
-?>
-
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Search Results for '<?= $query ?>'</h6>
@@ -36,18 +26,24 @@ $query = $data["data"]["query"];
                                     <td><?php
                                         $name = $item["name"];
                                         $id = $item["id"];
+
+                                        $categoriesUrl = url("admin/products/categories/details?id=$id");
+                                        $postCategoriesUrl = url("admin/posts/categories/details?id=$id");
+                                        $productsUrl = url("admin/products/details?id=$id");
+                                        $postsUrl = url("admin/posts/details?id=$id");
+
                                         switch ($key) {
                                             case "categories":
-                                                echo "<a href='/admin/products/categories/details?id=$id'>$name</a>";
+                                                echo "<a href='$categoriesUrl'>$name</a>";
                                                 break;
                                             case "postCategories":
-                                                echo "<a href='/admin/posts/categories/details?id=$id'>$name</a>";
+                                                echo "<a href='$postCategoriesUrl'>$name</a>";
                                                 break;
                                             case "products":
-                                                echo "<a href='/admin/products/details?id=$id'>$name</a>";
+                                                echo "<a href='$productsUrl'>$name</a>";
                                                 break;
                                             case "posts":
-                                                echo "<a href='/admin/posts/details?id=$id'>$name</a>";
+                                                echo "<a href='$postsUrl'>$name</a>";
                                                 break;
                                             default:
                                                 echo "<a href='#'>$name</a>";
@@ -73,8 +69,3 @@ $query = $data["data"]["query"];
         </div>
     </div>
 </div>
-
-
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="/js/demo/datatables-demo.js"></script>

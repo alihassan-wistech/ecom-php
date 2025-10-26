@@ -1,16 +1,14 @@
 <?php
 
-use App\controllers\ProductCategoryController;
+use App\Http\Controllers\ProductCategoryController;
 
 ?>
 
-<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800 flex-fill">Products</h1>
-    <a href="/admin/products/categories" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">
+    <a href="<?php echo url("admin/products/categories") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2">
         <i class="fas fa-filter fa-sm text-white-50"></i> Product Categories</a>
-    <a href="/admin/products/new" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+    <a href="<?php echo url("admin/products/new") ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Add new Product</a>
 </div>
 
@@ -45,7 +43,7 @@ use App\controllers\ProductCategoryController;
                             <td style="max-width: max-content;">
                                 <img style="object-fit: cover;" width="50" height="50" src="<?php echo $productImage  ?>" />
                             </td>
-                            <td><a href="/admin/products/details?id=<?= $product["id"] ?>"><?= $product["name"] ?></a></td>
+                            <td><a href="<?php echo url("admin/products/details?id=" . $product["id"])  ?>"><?= $product["name"] ?></a></td>
                             <td><?= $categoryName ?></td>
                             <td><?= $product["price"] ?></td>
                             <td><?= $product["quantity"] ?></td>
@@ -66,8 +64,3 @@ use App\controllers\ProductCategoryController;
         </div>
     </div>
 </div>
-
-
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="/js/demo/datatables-demo.js"></script>

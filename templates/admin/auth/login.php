@@ -13,12 +13,12 @@
                             </div>
                             <form class="user">
                                 <div class="form-group">
-                                    <label for="#email" class="form-label pl-3">Email</label>    
-                                <input type="email" class="form-control form-control-user" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                                    <label for="#email" class="form-label pl-3">Email</label>
+                                    <input type="email" class="form-control form-control-user" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
                                 </div>
                                 <div class="form-group">
-                                <label for="#password" class="form-label pl-3">Password</label>    
-                                <input type="password" class="form-control form-control-user" id="password" placeholder="Password">
+                                    <label for="#password" class="form-label pl-3">Password</label>
+                                    <input type="password" class="form-control form-control-user" id="password" placeholder="Password">
                                 </div>
                                 <button id="submit-btn" type="submit" class="btn btn-primary btn-user btn-block">
                                     Login
@@ -50,18 +50,18 @@
             email: emailInp.value,
             password: passwordInp.value
         }
-        const response = await fetch("/admin/signin", {
+        const response = await fetch("<?php echo url("admin/signin") ?>", {
             method: "POST",
             body: JSON.stringify(data)
         })
-        
+
         const result = await response.json()
         alert.classList.remove("d-none")
         alert.innerText = result.message
         if (result.status == true) {
             alert.classList.add("alert-success")
             alert.classList.remove("alert-danger")
-            window.location.href = "/admin"
+            window.location.href = "<?php echo url("admin") ?>"
         } else {
             alert.classList.add("alert-danger")
             alert.classList.remove("alert-success")

@@ -17,87 +17,102 @@ class Router
 
   public function run()
   {
-    $requestURI = parse_url($_SERVER["REQUEST_URI"]);
-    $requestMethod = $_SERVER["REQUEST_METHOD"];
-    $requestPath = $requestURI["path"];
+    // Parse request URI safely
+    $parsedURI = parse_url($_SERVER['REQUEST_URI'] ?? '/');
+    $requestPath = $parsedURI['path'] ?? '/';
+    $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-    $lastIdx = strlen($requestPath) - 1;
-    if (strlen($requestPath) > 1) {
-      if ($requestPath[$lastIdx] == "/") {
-        $requestPath = rtrim($requestPath, "/");
-        header("location:$requestPath");
+    // Apply base path stripping (only on the PATH string)
+    $basePath = base_path(); // e.g., "/my-app"
+    if ($basePath !== '' && $basePath !== '/') {
+      // Ensure basePath starts and ends without double slashes
+      $basePath = '/' . trim($basePath, '/');
+      if (strpos($requestPath, $basePath) === 0) {
+        $requestPath = substr($requestPath, strlen($basePath)) ?: '/';
       }
     }
 
+    // Normalize trailing slash: redirect if needed (only for non-root)
+    if ($requestPath !== '/' && str_ends_with($requestPath, '/')) {
+      $requestPath = rtrim($requestPath, '/');
+      // Use full URL for redirect to respect base path
+      $redirectUrl = url($requestPath);
+      header("Location: " . $redirectUrl, true, 301);
+      exit;
+    }
+
+    // Route matching
     $callback = null;
 
+    // Exact match
     foreach ($this->handlers as $handler) {
       if ($requestPath === $handler["path"] && $requestMethod === $handler["method"]) {
         $callback = $handler["handler"];
+        break;
       }
     }
 
-
+    // Parameterized match (if no exact match)
     if (!$callback) {
-
-      $callback = $this->getCallbackWithPathParams($requestPath);
-
+      $callback = $this->getCallbackWithPathParams($requestPath, $requestMethod); // ← pass method!
       if (!$callback) {
         $callback = $this->notFoundCallback;
       }
     }
 
-    if (is_array($callback)) {
+    // Resolve controller
+    if (is_array($callback) && is_string($callback[0])) {
       $controller = new $callback[0];
       $method = $callback[1];
       $callback = [$controller, $method];
     }
 
-    call_user_func_array($callback, [array_merge($_GET, $_POST, $this->routeParams)]);
+    // Call with merged input (note: consider changing this design long-term)
+    $params = array_merge($_GET, $_POST, $this->routeParams);
+    call_user_func_array($callback, [$params]);
   }
 
-  public function getCallbackWithPathParams($url)
+  public function getCallbackWithPathParams(string $url, string $method = self::METHOD_GET)
   {
     $url = trim($url, '/');
-    $getRoutes = [];
-    foreach ($this->handlers as $handler) {
-
-
-      if ($handler["method"] == self::METHOD_GET) {
-        $getRoutes[] = $handler;
-      }
-    }
-
     $routeParams = false;
 
-    foreach ($getRoutes as $route) {
-      $routePath = $route["path"];
-      // Trim slashes
-      $routePath = trim($routePath, '/');
-      $routeNames = [];
-
-      if (!$routePath) {
+    foreach ($this->handlers as $route) {
+      // ✅ Match by method too!
+      if ($route['method'] !== $method) {
         continue;
       }
 
+      $routePath = trim($route['path'], '/');
+      if ($routePath === '') continue;
+
+      $routeNames = [];
       if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $routePath, $matches)) {
         $routeNames = $matches[1];
       }
 
-      $routeRegex = "@^" . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn ($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $routePath) . "$@";
-      if (preg_match_all($routeRegex, $url, $valueMatches)) {
-        $values = [];
-        $totalMatches = count($valueMatches);
+      // Build regex
+      $routeRegex = preg_quote($routePath, '@');
+      $routeRegex = preg_replace_callback(
+        '/\\\{(\w+)(:([^}]+))?\\\}/',
+        function ($m) {
+          $pattern = $m[3] ?? '[^/]+';
+          return "({$pattern})";
+        },
+        $routeRegex
+      );
+      $routeRegex = "@^{$routeRegex}$@";
 
-        for ($i = 1; $i < $totalMatches; $i++) {
-          $values[] = $valueMatches[$i][0];
+      if (preg_match($routeRegex, $url, $valueMatches)) {
+        array_shift($valueMatches); // remove full match
+        if (count($routeNames) !== count($valueMatches)) {
+          continue; // mismatch
         }
-
-        $routeParams = array_combine($routeNames, $values);
-        $this->routeParams = $routeParams;
-        return $route["handler"];
+        $this->routeParams = array_combine($routeNames, $valueMatches);
+        return $route['handler'];
       }
     }
+
     return false;
   }
 
